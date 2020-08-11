@@ -1,0 +1,46 @@
+.orders-monitor {
+  display: flex;
+}
+
+table {
+  width: 50%;
+  font-family: 'Roboto', sans-serif;
+  border-right: 1px solid;
+  border-spacing: 10px;
+
+  tr {
+    width: 100px;
+    text-align: center;
+  }
+
+  th {
+    font-size: 30px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 20px;
+  }
+
+  th:first-child {
+  }
+
+  tr td:nth-child(3) {
+    border-right: 1px solid;
+  }
+
+
+  td {
+    padding: 20px;
+    color: white;
+    font-size: 40px;
+  }
+
+
+}
+
+.processing td {
+  background-color: orange;
+}
+
+.ready td {
+  background-color: green;
+}
