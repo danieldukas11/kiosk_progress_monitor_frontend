@@ -10,8 +10,10 @@ import {OrdersService} from '../../core/services/orders.service';
 export class ShowOrdersComponent implements OnInit {
 
   orders: any[] = [];
+  pendingOrders = [];
   cookingOrders = [];
   readyOrders = [];
+  latestReadyOrder;
 
   constructor(
     private webSocketService: WebSocketService,
@@ -22,19 +24,21 @@ export class ShowOrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.webSocketService.on('get_order').subscribe((order: any) => {
-      this.orders.push(order);
+      this.getOrdersByHttp();
     });
     this.webSocketService.on('cooking_order').subscribe((order: any) => {
-      // console.log('cooking order')
-      // const found = this.orders.find(ord => ord._id === order._id);
-      // found.status = order.status;
-      // console.log(found);
+      this.getOrdersByHttp();
+    });
+    this.webSocketService.on('ready_order').subscribe((order: any) => {
+      this.latestReadyOrder = order;
+
       this.getOrdersByHttp();
     });
     this.getOrdersByHttp();
   }
 
   getRows(orders) {
+    console.log(Array(Math.round(Object.keys(orders).length / 3)));
     return new Array(Math.round(Object.keys(orders).length / 3));
   }
 
@@ -49,10 +53,15 @@ export class ShowOrdersComponent implements OnInit {
   getOrdersByHttp() {
     this.ordersService.get().subscribe((dt: any[]) => {
       this.orders = dt;
+      this.pendingOrders = dt.filter(d => d.status === 'pending');
       this.cookingOrders = dt.filter(d => d.status === 'cooking');
       this.readyOrders = dt.filter(d => d.status === 'ready');
-      console.log(this.cookingOrders);
-      console.log(this.readyOrders);
+      setTimeout(() => {
+        this.latestReadyOrder = null;
+      }, 5000);
+      // console.log(this.pendingOrders);
+      // console.log(this.cookingOrders);
+      // console.log(this.readyOrders);
     });
   }
 

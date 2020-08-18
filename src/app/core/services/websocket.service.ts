@@ -10,7 +10,6 @@ export class WebSocketService {
   private socket;
 
   constructor() {
-    console.log(SOCKET_CONFIG)
     this.socket = io(SOCKET_CONFIG.url, SOCKET_CONFIG.options);
   }
 
